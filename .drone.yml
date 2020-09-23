@@ -48,6 +48,7 @@ steps:
   image: plugins/docker
   settings:
     registry: quay.io
+    context: ./cluster-autoscaler/
     repo: quay.io/mongodb/cluster-autoscaler
     tags:
     - git-${DRONE_COMMIT_SHA:0:7}
@@ -66,6 +67,7 @@ steps:
   settings:
     registry: quay.io
     repo: quay.io/mongodb/cluster-autoscaler
+    context: ./cluster-autoscaler/
     tags:
     - git-${DRONE_COMMIT_SHA:0:7}
     - ${DRONE_TAG}
