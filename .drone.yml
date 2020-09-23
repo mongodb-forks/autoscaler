@@ -8,8 +8,7 @@ platform:
   arch: amd64
 
 workspace:
-  base: /go
-  path: src/k8s.io/autoscaler/
+  path: /go/src/k8s.io/autoscaler/
 
 steps:
 - name: test
