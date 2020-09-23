@@ -16,10 +16,8 @@ steps:
   image: golang:1.12.10
   resources:
     requests:
-      cpu: 1
       memory: 3GiB
     limits:
-      cpu: 2
       memory: 4GiB
   commands:
   - cd cluster-autoscaler
