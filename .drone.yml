@@ -1,0 +1,67 @@
+---
+kind: pipeline
+type: kubernetes
+name: cluster-autoscaler
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  path: /go/src/k8s.io/autoscaler/
+
+steps:
+- name: test and build
+  pull: if-not-exists
+  image: golang:1.12.10
+  resources:
+    requests:
+      memory: 3GiB
+    limits:
+      memory: 4GiB
+  commands:
+  - cd cluster-autoscaler
+  - apt-get update && apt-get --yes install libseccomp-dev
+  - go get github.com/tools/godep
+  - go test -race ./...
+  - GOOS=linux LDFLAGS=-s CGO_ENABLED=0 make build-binary
+
+- name: publish_quay
+  pull: if-not-exists
+  image: plugins/docker
+  settings:
+    dockerfile: ./cluster-autoscaler/Dockerfile
+    registry: quay.io
+    context: ./cluster-autoscaler/
+    repo: quay.io/mongodb/cluster-autoscaler
+    tags:
+    - git-${DRONE_COMMIT_SHA:0:7}
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  when:
+    event:
+    - push
+
+- name: publish_quay_release
+  pull: if-not-exists
+  image: plugins/docker
+  settings:
+    dockerfile: ./cluster-autoscaler/Dockerfile
+    registry: quay.io
+    repo: quay.io/mongodb/cluster-autoscaler
+    context: ./cluster-autoscaler/
+    tags:
+    - git-${DRONE_COMMIT_SHA:0:7}
+    - ${DRONE_TAG}
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: docker_password
+    DOCKER_USERNAME:
+      from_secret: docker_username
+  when:
+    event:
+    - tag
+...
