@@ -13,7 +13,7 @@
 # limitations under the License.
 ARG BASEIMAGE=gcr.io/distroless/static:latest
 FROM $BASEIMAGE
-LABEL maintainer="Marcin Wielgus <mwielgus@google.com>"
+LABEL maintainer="Infrastructure<infrastructure@mongodb.com>"
 
 COPY cluster-autoscaler /
 CMD ["/cluster-autoscaler"]
