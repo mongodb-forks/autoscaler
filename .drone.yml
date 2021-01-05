@@ -22,8 +22,7 @@ steps:
   commands:
   - cd cluster-autoscaler
   - apt-get update && apt-get --yes install libseccomp-dev
-  - go get github.com/tools/godep
-  - go test -race ./...
+  - go test -mod=vendor -race ./...
   - GOOS=linux LDFLAGS=-s CGO_ENABLED=0 make build-binary
 
 - name: publish_quay
