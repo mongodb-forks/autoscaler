@@ -23,7 +23,7 @@ steps:
   - cd cluster-autoscaler
   - apt-get update && apt-get --yes install libseccomp-dev
   - go test -mod=vendor -race ./...
-  - GOOS=linux LDFLAGS=-s CGO_ENABLED=0 make build-binary
+  - GOOS=linux CGO_ENABLED=0 go build -mod=vendor -o cluster-autoscaler --ldflags "-s"
 
 - name: publish_quay
   pull: if-not-exists
