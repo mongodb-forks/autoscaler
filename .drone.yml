@@ -13,7 +13,7 @@ workspace:
 steps:
 - name: test and build
   pull: if-not-exists
-  image: golang:1.12.10
+  image: golang:1.13.14
   resources:
     requests:
       memory: 3GiB
